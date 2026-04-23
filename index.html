@@ -90,6 +90,16 @@
     -webkit-text-fill-color: transparent;
     text-transform: uppercase; margin-bottom: 2px;
   }
+  .title-with-photo {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .title-photo {
+    width: 44px; height: 44px; border-radius: 50%;
+    object-fit: cover; object-position: center top;
+    border: 2px solid var(--accent);
+    box-shadow: 0 2px 8px rgba(236,72,153,0.25);
+    flex-shrink: 0;
+  }
   .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; }
   .icon-btn {
     width: 40px; height: 40px; border-radius: 10px;
@@ -499,6 +509,90 @@
     display: flex; align-items: center; justify-content: center;
   }
   .motivation-shuffle:active { background: var(--surface-2); }
+  /* Weight tracker modal */
+  .wlog-form {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+    margin-bottom: 14px;
+  }
+  .wlog-form .full { grid-column: 1 / -1; }
+  .wlog-label {
+    font-size: 11px; font-weight: 700; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 4px; display: block;
+  }
+  .wlog-input {
+    width: 100%; padding: 10px 12px; background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-size: 14px; font-family: inherit;
+    box-sizing: border-box;
+  }
+  .wlog-input:focus {
+    outline: none; border-color: var(--accent);
+    background: rgba(236,72,153,0.05);
+  }
+  .wlog-add {
+    width: 100%; padding: 12px; margin-top: 4px;
+    background: var(--accent); color: white;
+    border: none; border-radius: 10px;
+    font-weight: 700; font-size: 14px; cursor: pointer;
+  }
+  .wlog-add:active { transform: scale(0.98); }
+  .wlog-list {
+    max-height: 360px; overflow-y: auto;
+    border-top: 1px solid var(--border); padding-top: 12px;
+  }
+  .wlog-empty {
+    text-align: center; color: var(--text-dim);
+    padding: 20px 10px; font-size: 13px; font-style: italic;
+  }
+  .wlog-entry {
+    padding: 10px 4px; border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: auto 1fr auto; gap: 10px;
+    align-items: start;
+  }
+  .wlog-entry:last-child { border-bottom: none; }
+  .wlog-date {
+    font-variant-numeric: tabular-nums; font-size: 11px;
+    color: var(--accent); font-weight: 700;
+    background: rgba(236,72,153,0.1); padding: 4px 8px;
+    border-radius: 6px; white-space: nowrap;
+    align-self: flex-start;
+  }
+  .wlog-body { min-width: 0; }
+  .wlog-metrics {
+    display: flex; flex-wrap: wrap; gap: 4px 12px;
+    font-size: 13px; font-variant-numeric: tabular-nums;
+  }
+  .wlog-metric { color: var(--text); }
+  .wlog-metric span { color: var(--text-dim); font-size: 11px; }
+  .wlog-note {
+    font-size: 12px; color: var(--text-dim); font-style: italic;
+    margin-top: 4px;
+  }
+  .wlog-delete {
+    background: none; border: none; color: var(--text-dim);
+    cursor: pointer; font-size: 18px; padding: 2px 6px;
+    border-radius: 6px; line-height: 1;
+  }
+  .wlog-delete:active { background: rgba(239,68,68,0.1); color: #ef4444; }
+  .wlog-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    padding: 12px; background: rgba(236,72,153,0.06);
+    border: 1px solid rgba(236,72,153,0.18);
+    border-radius: 10px; margin-bottom: 14px;
+  }
+  .wlog-stat { text-align: center; }
+  .wlog-stat-label {
+    font-size: 10px; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .wlog-stat-value {
+    font-size: 20px; font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    margin-top: 2px;
+  }
+  .wlog-stat-value.up { color: #ef4444; }
+  .wlog-stat-value.down { color: var(--green); }
   .note-card {
     background: rgba(234,179,8,0.1); border: 1px solid rgba(234,179,8,0.35);
     border-radius: 14px; padding: 14px 16px; margin-top: 10px;
@@ -519,10 +613,16 @@
     <div class="title-row">
       <div>
         <div class="title-accent">SoF(r)it</div>
-        <div class="title">SOFIA BARBERA</div>
+        <div class="title-with-photo">
+          <img class="title-photo" id="title-photo" src="sofia.png" alt="" onerror="this.style.display='none'">
+          <div class="title">SOFIA BARBERA</div>
+        </div>
         <div class="subtitle">Mese 1 · dal 27/04/26</div>
       </div>
-      <button class="icon-btn" id="btn-info" title="Info e zone FC">ⓘ</button>
+      <div style="display:flex; gap:8px; align-items:flex-start;">
+        <button class="icon-btn" id="btn-weight" title="Monitoraggio peso">📊</button>
+        <button class="icon-btn" id="btn-info" title="Info">ⓘ</button>
+      </div>
     </div>
     <div class="week-tabs" id="week-tabs"></div>
     <div class="day-tabs" id="day-tabs"></div>
@@ -555,6 +655,56 @@
       <button class="btn btn-ghost" id="timer-reset">Reset</button>
       <button class="btn btn-primary" id="timer-toggle">Avvia</button>
     </div>
+  </div>
+</div>
+
+<!-- Weight Monitoring Modal -->
+<div class="modal-overlay" id="modal-weight">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">📊 Monitoraggio peso</div>
+      <button class="modal-close" data-close="modal-weight">×</button>
+    </div>
+    <div class="wlog-stats" id="wlog-stats"></div>
+    <div class="wlog-form">
+      <div>
+        <label class="wlog-label" for="wl-date">Data</label>
+        <input class="wlog-input" type="date" id="wl-date">
+      </div>
+      <div>
+        <label class="wlog-label" for="wl-peso">Peso (kg)</label>
+        <input class="wlog-input" type="number" step="0.1" inputmode="decimal" id="wl-peso" placeholder="es. 64.2">
+      </div>
+      <div>
+        <label class="wlog-label" for="wl-vita">Vita (cm)</label>
+        <input class="wlog-input" type="number" step="0.5" inputmode="decimal" id="wl-vita" placeholder="opzionale">
+      </div>
+      <div>
+        <label class="wlog-label" for="wl-fianchi">Fianchi (cm)</label>
+        <input class="wlog-input" type="number" step="0.5" inputmode="decimal" id="wl-fianchi" placeholder="opzionale">
+      </div>
+      <div>
+        <label class="wlog-label" for="wl-coscia">Coscia (cm)</label>
+        <input class="wlog-input" type="number" step="0.5" inputmode="decimal" id="wl-coscia" placeholder="opzionale">
+      </div>
+      <div>
+        <label class="wlog-label" for="wl-umore">Umore</label>
+        <select class="wlog-input" id="wl-umore">
+          <option value="">—</option>
+          <option value="💪">💪 On fire</option>
+          <option value="😊">😊 Bene</option>
+          <option value="😐">😐 Così così</option>
+          <option value="😩">😩 Giù</option>
+          <option value="🩸">🩸 Ciclo</option>
+        </select>
+      </div>
+      <div class="full">
+        <label class="wlog-label" for="wl-note">Sensazioni / Note</label>
+        <input class="wlog-input" type="text" id="wl-note" placeholder="mangiato salato, poco sonno, gonfia…">
+      </div>
+      <button class="wlog-add full" id="wl-add">Salva misurazione</button>
+    </div>
+    <div class="wlog-list" id="wlog-list"></div>
   </div>
 </div>
 
@@ -716,12 +866,14 @@
     byName: {},   // norm(nome esercizio) -> ultimo peso usato (per hint cross-settimana)
     notes: {},    // "w-d-i" -> string (nota esercizio)
     feedback: {}, // "w-d" -> { score: 1-10, note: string }
-    eta: 30, sesso: 'm',
+    weightLog: [], // [{ date: '2026-04-27', peso, vita, fianchi, coscia, umore, note }]
+    eta: 30, sesso: 'f',
   }, JSON.parse(localStorage.getItem(STATE_KEY) || '{}'));
   if (!state.weights) state.weights = {};
   if (!state.byName) state.byName = {};
   if (!state.notes) state.notes = {};
   if (!state.feedback) state.feedback = {};
+  if (!state.weightLog) state.weightLog = [];
 
   function saveState() {
     localStorage.setItem(STATE_KEY, JSON.stringify(state));
@@ -749,25 +901,25 @@
   // Frasi motivazionali ironiche (cambiano ad ogni sessione)
   const QUOTES = [
     "Sofiiii, meno storie e più hip thrust.",
-    "Oggi niente scuse: il tuo fondoschiena ha un appuntamento con la storia.",
-    "I glutei non crescono mentre scrolli Instagram. Alza 'sta macchina.",
-    "Se l'RPE è 3, stai facendo finta. Carica.",
-    "La wall ball non si lancia con la forza delle scuse.",
-    "Hai pianificato tutto a tavolino, ora eseguilo. SoF(r)it, non SoFlop.",
-    "Un altro squat. Poi un altro. Poi un altro. Questo è il piano.",
-    "Le unghie laccate di fresco non sono una scusa per saltare la palestra.",
-    "Il cardio finale esiste perché il coach ti odia bene. Finiscilo.",
-    "Se dopo il mini-WOD non sei rossa in faccia hai barato.",
-    "Box step up: spingi dal tallone, non lamentarti dal diaframma.",
-    "Mese 1, settimana 1, serie 1: inizia a esistere.",
-    "Sei qui: bravissima. Ora fai qualcosa, non limitarti a respirare.",
-    "Le foto del 'prima e dopo' non si scattano da sole. Guadagnatele.",
-    "Il wall sit è come la vita: tieni duro e conta solo i minuti che mancano.",
-    "Hai scelto tu il leg curl. Adesso pedala.",
-    "I frog pump sono ridicoli ma funzionano. Smettila di ridere e contrai.",
-    "Dead bug non significa stare sdraiata a riposare.",
-    "Se finisci con RPE 10, buono. Se finisci con 6, era troppo leggero. Prossima volta aggiungi.",
-    "Il piatto di pasta della domenica sa di vittoria solo se oggi ti sei spaccata."
+    "Le unghie appena fatte non sono una scusa. Lo sai.",
+    "Oggi i glutei non si formano da soli mentre guardi Reel.",
+    "Se l'RPE è 3 stai facendo finta. Carica un po'.",
+    "Sì, ti brucia tutto. È il piano.",
+    "La tazzina di caffè post-palestra si merita solo se finisci il mini-WOD.",
+    "SoF(r)it, non SoFlop. Su.",
+    "Un altro squat. Poi un altro. Basta parlare.",
+    "Il coach non ti ha scritto il programma per leggerlo, amore.",
+    "Il box step up sa quando tiri via il piede. Spingi dal tallone.",
+    "Wall sit 45 secondi. Se ti sembrano infiniti è perché li stai facendo bene.",
+    "Pigiama e divano possono aspettare un'ora. L'ora giusta è adesso.",
+    "Se dopo i frog pump non ridi, li stai sbagliando. Ma contrai lo stesso.",
+    "Le foto del 'prima e dopo' si guadagnano una rep alla volta.",
+    "Hai pianificato tutto, Sofia. Adesso esegui e basta.",
+    "Il dolore buono è quello del giorno dopo. Oggi paghi quello.",
+    "Dead bug non è 'insetto morto'. Non imitarlo alla lettera.",
+    "Le scuse sono come i leggings vecchi: dopo un po' si vedono.",
+    "Sì ok, oggi sei gonfia. Anche ieri. Anche dopodomani. Si va comunque.",
+    "Chiudi bene la serie, non la lasciare a metà come le stories."
   ];
   function quoteFor(w, d) {
     const idx = ((w * 7 + d) + (state.quoteShift || 0)) % QUOTES.length;
@@ -893,7 +1045,7 @@
       <div class="motivation">
         <button class="motivation-shuffle" id="quote-shuffle" title="Cambia frase">↻</button>
         <div class="motivation-text" id="quote-text">${esc(quoteFor(state.week, state.day))}</div>
-        <div class="motivation-sign">— il tuo coach ti sta giudicando</div>
+        <div class="motivation-sign">— il tuo capo ti sta guardando 👀</div>
       </div>
     `;
 
@@ -1167,6 +1319,118 @@
     document.getElementById('sesso').value = state.sesso;
     computeZones();
     document.getElementById('modal-info').classList.add('open');
+  };
+
+  // ---- Weight log ----
+  function todayISO() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${dd}`;
+  }
+  function fmtDateIT(iso) {
+    if (!iso) return '';
+    const parts = iso.split('-');
+    if (parts.length !== 3) return iso;
+    return `${parts[2]}/${parts[1]}/${parts[0].slice(2)}`;
+  }
+  function renderWeightLog() {
+    const list = (state.weightLog || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+    const listEl = document.getElementById('wlog-list');
+    const statsEl = document.getElementById('wlog-stats');
+
+    // Stats
+    const withPeso = list.filter(x => x.peso != null && !isNaN(parseFloat(x.peso)));
+    if (withPeso.length >= 1) {
+      const chrono = withPeso.slice().reverse();
+      const first = parseFloat(chrono[0].peso);
+      const latest = parseFloat(chrono[chrono.length-1].peso);
+      const delta = +(latest - first).toFixed(1);
+      const cls = delta > 0 ? 'up' : (delta < 0 ? 'down' : '');
+      const sign = delta > 0 ? '+' : '';
+      statsEl.innerHTML = `
+        <div class="wlog-stat">
+          <div class="wlog-stat-label">Iniziale</div>
+          <div class="wlog-stat-value">${first.toFixed(1)}</div>
+        </div>
+        <div class="wlog-stat">
+          <div class="wlog-stat-label">Attuale</div>
+          <div class="wlog-stat-value">${latest.toFixed(1)}</div>
+        </div>
+        <div class="wlog-stat">
+          <div class="wlog-stat-label">Variazione</div>
+          <div class="wlog-stat-value ${cls}">${sign}${delta}</div>
+        </div>`;
+    } else {
+      statsEl.innerHTML = '';
+    }
+
+    if (list.length === 0) {
+      listEl.innerHTML = `<div class="wlog-empty">Nessuna misurazione ancora. Aggiungi la prima sopra.</div>`;
+      return;
+    }
+    listEl.innerHTML = list.map((e, idx) => {
+      const metrics = [];
+      if (e.peso != null && e.peso !== '') metrics.push(`<div class="wlog-metric"><strong>${e.peso}</strong> <span>kg</span></div>`);
+      if (e.vita) metrics.push(`<div class="wlog-metric">${e.vita} <span>vita</span></div>`);
+      if (e.fianchi) metrics.push(`<div class="wlog-metric">${e.fianchi} <span>fianchi</span></div>`);
+      if (e.coscia) metrics.push(`<div class="wlog-metric">${e.coscia} <span>coscia</span></div>`);
+      if (e.umore) metrics.push(`<div class="wlog-metric">${e.umore}</div>`);
+      const note = e.note ? `<div class="wlog-note">${esc(e.note)}</div>` : '';
+      return `<div class="wlog-entry">
+        <div class="wlog-date">${fmtDateIT(e.date)}</div>
+        <div class="wlog-body">
+          <div class="wlog-metrics">${metrics.join('')}</div>
+          ${note}
+        </div>
+        <button class="wlog-delete" data-wldel="${esc(e.date)}_${idx}" title="Elimina">🗑</button>
+      </div>`;
+    }).join('');
+
+    listEl.querySelectorAll('[data-wldel]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-wldel');
+        const [delDate, delIdxStr] = key.split('_');
+        // Find the matching entry in original array and remove
+        const target = list[parseInt(delIdxStr, 10)];
+        if (!target) return;
+        if (!confirm('Eliminare questa misurazione?')) return;
+        state.weightLog = state.weightLog.filter(e => !(e.date === target.date && e._id === target._id));
+        saveState();
+        renderWeightLog();
+      });
+    });
+  }
+  function openWeightLog() {
+    document.getElementById('wl-date').value = todayISO();
+    ['wl-peso','wl-vita','wl-fianchi','wl-coscia','wl-note'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('wl-umore').value = '';
+    renderWeightLog();
+    document.getElementById('modal-weight').classList.add('open');
+  }
+  document.getElementById('btn-weight').onclick = openWeightLog;
+  document.getElementById('wl-add').onclick = () => {
+    const date = document.getElementById('wl-date').value || todayISO();
+    const peso = document.getElementById('wl-peso').value.trim();
+    const vita = document.getElementById('wl-vita').value.trim();
+    const fianchi = document.getElementById('wl-fianchi').value.trim();
+    const coscia = document.getElementById('wl-coscia').value.trim();
+    const umore = document.getElementById('wl-umore').value;
+    const note = document.getElementById('wl-note').value.trim();
+    if (!peso && !vita && !fianchi && !coscia && !note && !umore) {
+      alert('Inserisci almeno un dato.');
+      return;
+    }
+    state.weightLog.push({
+      _id: Date.now() + Math.random(),
+      date, peso, vita, fianchi, coscia, umore, note
+    });
+    saveState();
+    // Clear inputs except date
+    ['wl-peso','wl-vita','wl-fianchi','wl-coscia','wl-note'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('wl-umore').value = '';
+    renderWeightLog();
   };
 
   // ---- HR zones ----
