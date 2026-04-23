@@ -643,6 +643,7 @@
     font-size: 11px;
   }
   .pset-slot-placeholder span { font-size: 22px; display: block; margin-bottom: 4px; }
+  .pset-slot-placeholder small { display: block; font-size: 9px; opacity: 0.7; margin-top: 2px; }
   .pset-slot img {
     width: 100%; height: 100%; object-fit: cover;
   }
@@ -818,22 +819,22 @@
       <div class="pset-grid">
         <label class="pset-slot" data-angle="davanti">
           <span class="pset-slot-label">Davanti</span>
-          <div class="pset-slot-placeholder"><span>📷</span>tocca per foto</div>
-          <input type="file" accept="image/*" capture="user" data-input="davanti">
+          <div class="pset-slot-placeholder"><span>📷</span>tocca per foto<small>camera o rullino</small></div>
+          <input type="file" accept="image/*" data-input="davanti">
         </label>
         <label class="pset-slot" data-angle="retro">
           <span class="pset-slot-label">Retro</span>
-          <div class="pset-slot-placeholder"><span>📷</span>tocca per foto</div>
-          <input type="file" accept="image/*" capture="environment" data-input="retro">
+          <div class="pset-slot-placeholder"><span>📷</span>tocca per foto<small>camera o rullino</small></div>
+          <input type="file" accept="image/*" data-input="retro">
         </label>
         <label class="pset-slot" data-angle="dx">
           <span class="pset-slot-label">Destra</span>
-          <div class="pset-slot-placeholder"><span>📷</span>tocca per foto</div>
+          <div class="pset-slot-placeholder"><span>📷</span>tocca per foto<small>camera o rullino</small></div>
           <input type="file" accept="image/*" data-input="dx">
         </label>
         <label class="pset-slot" data-angle="sx">
           <span class="pset-slot-label">Sinistra</span>
-          <div class="pset-slot-placeholder"><span>📷</span>tocca per foto</div>
+          <div class="pset-slot-placeholder"><span>📷</span>tocca per foto<small>camera o rullino</small></div>
           <input type="file" accept="image/*" data-input="sx">
         </label>
       </div>
