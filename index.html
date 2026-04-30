@@ -819,6 +819,7 @@
       <button class="btn btn-ghost" id="timer-reset">Reset</button>
       <button class="btn btn-primary" id="timer-toggle">Avvia</button>
     </div>
+    <button class="btn btn-ghost" id="timer-test" style="margin-top:8px; width:100%; font-size:13px; opacity:0.8;">🔊 Test suono fine</button>
   </div>
 </div>
 
@@ -1957,17 +1958,39 @@
     tDisplay.classList.toggle('running', timerRunning && timerRemaining > 0);
     tDisplay.classList.toggle('done', timerRemaining <= 0);
   }
+  // Audio context unico, sbloccato al primo gesto utente (necessario su iOS PWA)
+  let audioCtx = null;
+  function ensureAudio() {
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return null; }
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+  function tone(ctx, startSec, durSec, freq, gain) {
+    const t0 = ctx.currentTime + startSec;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'square';      // più "ronzio" tipo sveglia
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01);
+    g.gain.setValueAtTime(gain, t0 + durSec - 0.04);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + durSec);
+    o.start(t0);
+    o.stop(t0 + durSec + 0.05);
+  }
   function beep() {
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const o = ctx.createOscillator(); const g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.frequency.value = 880; o.type = 'sine';
-      g.gain.setValueAtTime(0.3, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-      o.start(); o.stop(ctx.currentTime + 0.4);
-      if (navigator.vibrate) navigator.vibrate([200, 80, 200, 80, 400]);
-    } catch(e) {}
+    const ctx = ensureAudio();
+    if (ctx) {
+      // tre bip corti + un bip lungo (sveglia palestra)
+      tone(ctx, 0.00, 0.18, 880, 0.6);
+      tone(ctx, 0.25, 0.18, 880, 0.6);
+      tone(ctx, 0.50, 0.18, 880, 0.6);
+      tone(ctx, 0.85, 0.65, 660, 0.7);
+    }
+    if (navigator.vibrate) navigator.vibrate([180, 80, 180, 80, 180, 120, 600]);
   }
   function startTimer() {
     timerRunning = true; tToggle.textContent = 'Pausa';
@@ -2001,7 +2024,12 @@
     };
   });
   document.getElementById('btn-timer').onclick = () => {
+    ensureAudio(); // sblocca l'audio mentre c'è il gesto utente
     document.getElementById('modal-timer').classList.add('open');
+  };
+  document.getElementById('timer-test').onclick = () => {
+    ensureAudio();
+    beep();
   };
   updateTimer();
 
